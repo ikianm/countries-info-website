@@ -32,3 +32,25 @@
 .button-icon {
     margin-right: 5px;
 }
+
+@media screen and (max-width: 398px) {
+    .button.back {
+        top: 80px;
+        width: 100px;
+        height: 40px;
+    }
+
+    .button {
+        width: 50px;
+        height: 22px;
+
+    }
+}
+
+@media screen and (max-width: 391px) {
+    .button.back {
+        top: 140px;
+        width: 100px;
+        height: 40px;
+    }
+}

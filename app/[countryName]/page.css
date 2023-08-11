@@ -1,6 +1,6 @@
 .country-page {
     width: 100vw;
-    min-height: 89.3vh;
+    min-height: 88.2vh;
     background-color: var(--dark-bg);
     padding: 0 4%;
     display: flex;
@@ -54,7 +54,7 @@
     align-items: center;
     font-weight: var(--font-semi-bold);
     position: absolute;
-    bottom: 240px;
+    bottom: 85px;
 }
 
 .country-page-borders div {
@@ -65,12 +65,6 @@
     flex-wrap: wrap;
 }
 
-@media screen and (max-width: 1184px) {
-    .country-page-description {
-        margin-left: 30px;
-    }
-
-}
 
 @media screen and (max-width: 1184px) {
 
@@ -85,19 +79,29 @@
     }
 
     .country-page-borders {
-        bottom: 100px;
+        bottom: -130px;
     }
+
+}
+
+@media screen and (max-width: 627px) {
+    .country-page-borders div {
+        width: 300px;
+    }
+
+    .country-page-borders {
+        bottom: -110px;
+    }
+
 }
 
 @media screen and (max-width: 545px) {
     .country-page-borders {
         display: flex;
-        bottom: 50px;
+        bottom: -75px;
     }
 
-    .country-page-borders div {
-        width: 300px;
-    }
+
 }
 
 @media screen and (max-width: 545px) {
@@ -106,17 +110,13 @@
     }
 }
 
-@media screen and (max-width: 426px) {
-    .country-page-lists-wrapper ul {
-        margin: 30px 0 0 0;
-    }
-}
 
-@media screen and (max-width: 398px) {
+@media screen and (max-width: 477px) {
+
     .country-page-borders {
         flex-direction: column;
         justify-content: center;
-        bottom: 50px;
+        bottom: -150px;
         left: 0;
         width: 100%;
     }
@@ -125,6 +125,28 @@
         margin-left: 0;
         margin-top: 2px;
         justify-content: center;
+    }
+}
+
+@media screen and (max-width: 426px) {
+    .country-page-lists-wrapper ul {
+        margin: 30px 0 0 0;
+    }
+
+    .country-page-borders {
+        position: absolute;
+        bottom: -100px;
+    }
+}
+
+@media screen and (max-width: 398px) {
+
+    .country-page {
+        height: 121vh;
+    }
+
+    .country-page-borders {
+        bottom: -220px;
     }
 
     #flag {
@@ -153,12 +175,5 @@
 
     .country-page-lists-wrapper ul li {
         margin: 10px 0;
-    }
-}
-
-@media screen and (max-width: 382px) {
-    .country-page {
-        min-height: 95.2vh;
-
     }
 }
