@@ -16,13 +16,14 @@ export default function HomePage() {
   const [isPending, startTransition] = useTransition();
   const themeCtx = useContext(ThemeContext);
   useEffect(() => {
-    fetch('https://restcountries.com/v3.1/all?fields=name,flags,capital,region,population',
-      { cache: 'force-cache' })
-      .then(res => res.json())
-      .then(data => {
-        setShownCountries(data);
-        setAllCountries(data);
-      });
+    const fetchAllCountries = async () => {
+      const res = await fetch('https://restcountries.com/v3.1/all?fields=name,flags,capital,region,population',
+        { cache: 'force-cache' });
+      const data = await res.json();
+      setShownCountries(data);
+      setAllCountries(data);
+    };
+    fetchAllCountries();
   }, [])
 
   const searchCountryHandler = (e: ChangeEvent<HTMLInputElement>) => {

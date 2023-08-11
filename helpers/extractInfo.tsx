@@ -1,4 +1,4 @@
-export function extractInfo(data: any): any {
+export function extractInfo(data: any) {
     const currenciesKey = Object.keys(data.currencies);
     const languagesKeys = Object.keys(data.languages);
     const allLanguages: string[] = [];
