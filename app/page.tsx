@@ -1,95 +1,91 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
+import React, { ChangeEvent, useEffect, useState, useTransition, useContext } from 'react';
+import { AFRICA, AMERICA, ASIA, EUROPE, OCEANIA } from '@/constants/constants';
+import { HiMagnifyingGlass } from 'react-icons/hi2';
+import CountriesList from '@/components/CountriesList/CountriesList';
+import CircularProgress from '@mui/material/CircularProgress';
+import { CountryType } from '@/types/types';
+import { ThemeContext } from '@/contexts/themeContext';
+import './page.css';
 
-export default function Home() {
+
+export default function HomePage() {
+  const [allCountries, setAllCountries] = useState<CountryType[] | null>();
+  const [shownCountries, setShownCountries] = useState<CountryType[] | null>();
+  const [region, setRegion] = useState<string>('all');
+  const [isPending, startTransition] = useTransition();
+  const themeCtx = useContext(ThemeContext);
+  useEffect(() => {
+    fetch('https://restcountries.com/v3.1/all?fields=name,flags,capital,region,population',
+      { cache: 'force-cache' })
+      .then(res => res.json())
+      .then(data => {
+        setShownCountries(data);
+        setAllCountries(data);
+      });
+  }, [])
+
+  const searchCountryHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const filterPattern = e.target.value;
+    startTransition(() => {
+      setShownCountries(prevState => {
+        if (region !== 'all') { //if there is an active region filter, this returns result based on both region & search value
+          return allCountries?.filter(country => country.name.official.includes(filterPattern) && country.region === region);
+        }
+        return allCountries?.filter(country => country.name.official.includes(filterPattern));
+      });
+    })
+  };
+
+  const filterByRegionHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+    setRegion(e.target.value);
+    setShownCountries(prevState => {
+      return allCountries?.filter(country => country.region === e.target.value);
+    });
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <>
+      {
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        shownCountries ? (
+          <div className={themeCtx.isThemeDark ? 'homepage' : 'homepage light'} >
+            <div className="homepage-inputs">
+              <div className={themeCtx.isThemeDark ? 'homepage-search-wrapper' : 'homepage-search-wrapper light'}>
+                <HiMagnifyingGlass className={themeCtx.isThemeDark ? 'homepage-search-icon' : 'homepage-search-icon light'} />
+                <input type="text" placeholder='Search for a country...' onChange={searchCountryHandler} />
+              </div>
+              <select
+                name="select-region"
+                className={themeCtx.isThemeDark ? 'homepage-select-region' : 'homepage-select-region light'}
+                onChange={filterByRegionHandler}
+              >
+                <option value='Default' hidden>
+                  Filter by region
+                </option>
+                <option value={AFRICA}>Africa</option>
+                <option value={AMERICA}>America</option>
+                <option value={ASIA}>Asia</option>
+                <option value={EUROPE}>Europe</option>
+                <option value={OCEANIA}>Oceania</option>
+              </select>
+            </div>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+            <div className="homepage-countries-preview">
+              {
+                shownCountries ? <CountriesList selectedCountries={shownCountries} /> : null
+              }
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+            </div>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+
+          </div>
+        ) :
+          <div className="homepage spinner">
+            <CircularProgress id='spinner' />
+          </div>
+      }
+    </>
   )
 }

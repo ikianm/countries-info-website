@@ -1,0 +1,14 @@
+.country-page {
+    width: 100vw;
+    min-height: 89.3vh;
+    background-color: var(--dark-bg);
+    padding: 0 4%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--dark-text);
+}
+
+#spinner {
+    font-size: 50px;
+}
